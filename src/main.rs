@@ -1,3 +1,5 @@
+mod tokenizer;
+use tokenizer::{Tokenizer, Token};
 use std::io::{self, Write};
 
 enum Operators {
@@ -37,7 +39,16 @@ fn main() {
             break;
         }
 
+        let mut tokenizer = Tokenizer::new(input);
+        let tokens = tokenizer.tokenize();
         
+        println!("Tokens: {:?}", tokens);
+        
+        //for now, just show tokens - will add evaluation later
+        if tokens.len() > 1 { //more than just EOF
+            println!("I see you want to calculate: {:?}", tokens);
+
+        }
         let mut op_char = None;
         for c in input.chars() {
             if Operators::from_char(c).is_some() {
