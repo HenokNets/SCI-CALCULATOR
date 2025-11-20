@@ -19,16 +19,37 @@ pub struct Tokenizer {
 }
 
 impl Tokenizer {
-    pub fn new(input: String) -> Self {
+    pub fn new(input: &str) -> Self {
+        let input = input.to_string();
+        let current_char = input.chars().next();
         Tokenizer {
-            input: input.to_string(),
+            input,
             position: 0,
-            current_char: input.chars().next(),
+            current_char,
         }
     
     }
-    fn advance(&mut self) { ... }
-    fn skip_whitespace(&mut self) { ... }
+    fn advance(&mut self) { 
+        self.position += 1;
+        if self.position >= self.input.len() {
+            self.current_char = None;
+        } else {
+            self.current_char = self.input.chars().nth(self.position);
+        }
+     }
+
+     
+    fn skip_whitespace(&mut self) { 
+        while let Some(c) = self.current_char {
+            if c.is_whitespace() {
+                self.advance();
+            } else {
+                break;
+            }
+        }
+
+
+    }
     fn read_number(&mut self) -> Token { ... }
     pub fn next_token(&mut self) -> Token { ... }
 
