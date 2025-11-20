@@ -1,5 +1,5 @@
 #[derive(Debug, PartialEq)]
-enum Token {
+pub enum Token {
     Number(f64),
     Plus,
     Minus,
@@ -64,6 +64,67 @@ impl Tokenizer {
         let number: f64 = number_str.parse().unwrap();
         Token::Number(number)
     }
-    pub fn next_token(&mut self) -> Token { ... }
+    pub fn next_token(&mut self) -> Token {
+        self.skip_whitespace();
+
+        match self.current_char {
+            Some('+') => {
+                self.advance();
+                Token::Plus
+            }
+
+            Some('-') => {
+                self.advance();
+                Token::Minus
+            }
+
+            Some('*') => {
+                self.advance();
+                Token::Star
+            }
+
+            Some('/') => {
+                self.advance();
+                Token::Slash
+            }
+
+            Some('(') => {
+                self.advance();
+                Token::LParen
+            }
+
+            Some(')') => {
+                self.advance();
+                Token::RParen
+            }
+
+            Some(c) if c.is_ascii_digit() => self.read_number(),
+            None => Token::EOF,
+            _ => panic!("Unknown character: {:?}", self.current_char),
+        }
+
+
+
+    
+    }
+
+    pub fn tokenize (&mut self) -> Vec<Token> {
+
+        let mut tokens = Vec::new();
+        loop {
+            let token = self.next_token();
+
+            let is_eof = token == Token::EOF;
+
+            tokens.push(token);
+
+            if is_eof {
+                break;
+            }
+        }
+
+        tokens
+
+    }
 
 }
