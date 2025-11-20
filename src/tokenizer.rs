@@ -50,7 +50,20 @@ impl Tokenizer {
 
 
     }
-    fn read_number(&mut self) -> Token { ... }
+    fn read_number(&mut self) -> Token { 
+        let mut number_str = String::new();
+        while let Some (c) = self.current_char {
+            if c.is_ascii_digit() || c == '.' {
+                number_str.push(c);
+                self.advance();
+            } else {
+                break;
+            }
+        }
+
+        let number: f64 = number_str.parse().unwrap();
+        Token::Number(number)
+    }
     pub fn next_token(&mut self) -> Token { ... }
 
 }
