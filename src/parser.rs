@@ -65,6 +65,31 @@ impl Parser {
         node
     }
 
+    fn parse_factor(&mut self) -> Expr {
+        match self.current() {
+            Token::Number(n) => {
+                let val = *n;
+                self.advance();
+                Expr::Number(val)
+            }
 
+            Token::LParen => {
+                self.advance(); //skip '('
+                let expr = self.parse_expr();
 
+                match self.current() {
+                    Token::RParen => self.advance(),
+                    _ => panic!("Expected ')'"),
+                }
+
+                expr
+            }
+
+            other => panic!("Unexpected token in factor: {:?}", other),
+        }
+    }
 }
+
+
+
+
