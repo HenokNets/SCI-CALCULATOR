@@ -4,7 +4,7 @@ use crate::tokenizer::Token;
 
 pub enum Expr {
     Number (f64),
-    BinaryOp {
+    Binary {
         left: Box<Expr>,
         op: Token,
         right: Box<Expr>,
@@ -27,4 +27,44 @@ impl Parser {
         fn current(&self) -> &Token {
         &self.tokens[self.position]
     }
+
+        fn advance(&mut self) {
+        if self.position < self.tokens.len() - 1 {
+            self.position += 1;
+        }
+    }
+
+    // Grammar:
+    //
+    // expr        = term (("+" | "-") term)*
+    // term        = factor (("*" | "/") factor)*
+    // factor      = NUMBER | "(" expr ")"
+    
+    pub fn parse(&mut self) -> Expr {
+        self.parse_expr()
+    }
+
+    fn parse_expr(&mut self) -> Expr {
+        let mut node = self.parse_term();
+
+        loop {
+            match self.current() {
+                Token::Plus | Token::Minus => {
+                    let op = self.current().clone();
+                    self.advance();
+                    let right = self.parse_term();
+                    node = Expr::Binary {
+                        left: Box::new(node),
+                        op,
+                        right: Box::new(right),
+                    };
+                }
+                    _ => break,
+            }
+        }
+        node
+    }
+
+
+
 }
