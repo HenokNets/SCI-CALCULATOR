@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     Number(f64),
     Plus,
@@ -112,9 +112,9 @@ impl Tokenizer {
 
         let mut tokens = Vec::new();
         loop {
-            let token = self.next_token();
+            let token: Token = self.next_token();
 
-            let is_eof = token == Token::EOF;
+            let is_eof: bool = token == Token::EOF;
 
             tokens.push(token);
 
