@@ -4,6 +4,9 @@ mod parser;
 use tokenizer::Tokenizer;
 use parser::Parser;
 
+mod evaluator;
+
+
 use std::io::{self, Write};
 
 fn main() {
@@ -25,13 +28,13 @@ fn main() {
             break;
         }
 
-        let mut tokenizer = Tokenizer::new(input);
-        let tokens = tokenizer.tokenize();
+        let mut tokenizer: Tokenizer = Tokenizer::new(input);
+        let tokens: Vec<tokenizer::Token> = tokenizer.tokenize();
 
-        let mut parser = Parser::new(tokens);
-        let ast = parser.parse();
+        let mut parser: Parser = Parser::new(tokens);
+        let ast: parser::Expr = parser.parse();
 
-        let result = ast.eval();
+        let result: f64 = ast.eval();
 
         println!("{}", result);
     }
